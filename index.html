@@ -10,9 +10,9 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <style>
-  /* ===== Paleta romántica (se adapta a modo claro / oscuro) ===== */
+  /* ================= PALETA ================= */
   :root {
     --fondo: #F8DCE5;
     --brillo: #FFF3F6;
@@ -28,24 +28,22 @@
     --petalo-borde: #E4A100;
     --centro: #8A4B10;
     --tarjeta: #FFFFFFB3;
+    --papel: #FFFBF4;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --fondo: #2B1320;
-      --brillo: #4A2034;
-      --vino: #F8D3E0;
-      --rosa: #F07FA3;
-      --maceta-sombra: #C99AAB;
-      --tarjeta: #3A1A2B99;
+      --fondo: #2B1320; --brillo: #4A2034; --vino: #F8D3E0; --rosa: #F07FA3;
+      --maceta-sombra: #C99AAB; --tarjeta: #3A1A2B99;
     }
   }
   :root[data-theme="dark"] {
-    --fondo: #2B1320;
-    --brillo: #4A2034;
-    --vino: #F8D3E0;
-    --rosa: #F07FA3;
-    --maceta-sombra: #C99AAB;
-    --tarjeta: #3A1A2B99;
+    --fondo: #2B1320; --brillo: #4A2034; --vino: #F8D3E0; --rosa: #F07FA3;
+    --maceta-sombra: #C99AAB; --tarjeta: #3A1A2B99;
+  }
+  /* Cielo de noche cuando la flor abre (va al final para ganar prioridad) */
+  :root.noche {
+    --fondo: #1A1535; --brillo: #3B2F6B; --vino: #F6DCE8; --rosa: #F58BAE;
+    --maceta-sombra: #B9A3D6; --tarjeta: #2A2352CC;
   }
 
   :root {
@@ -53,6 +51,7 @@
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
   *, *::before, *::after { box-sizing: inherit; }
   html, body { height: 100%; margin: 0; }
   body {
@@ -62,7 +61,9 @@
     display: flex;
     overflow-x: hidden;
     overflow-y: auto;
+    transition: background-color 2s ease, color 2s ease;
   }
+  body.bloqueado { overflow: hidden; }
 
   .escena {
     margin: auto;
@@ -71,8 +72,10 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 10px;
-    padding: 12px 0;
+    gap: 12px;
+    padding: 20px 0 40px;
+    position: relative;
+    z-index: 1;
   }
 
   h1 {
@@ -83,9 +86,8 @@
     margin: 0;
     color: var(--rosa);
   }
-
   .disculpa {
-    margin: 0 0 4px;
+    margin: 0;
     max-width: 34ch;
     font-style: italic;
     font-weight: 500;
@@ -94,6 +96,119 @@
     opacity: .9;
   }
 
+  /* ================= PANTALLA DE INICIO ================= */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--fondo);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    padding: 24px;
+    text-align: center;
+    transition: opacity .9s ease;
+  }
+  .intro.saliendo { opacity: 0; pointer-events: none; }
+  .intro h2 {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 11vw, 3.4rem);
+    line-height: 1.05;
+    margin: 0;
+    color: var(--rosa);
+  }
+  .sobre {
+    position: relative;
+    width: 210px;
+    height: 136px;
+    background: var(--maceta);
+    border-radius: 8px;
+    box-shadow: 0 12px 30px #7A1F4226;
+    perspective: 600px;
+  }
+  .sobre::after {                     /* líneas inferiores del sobre */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background:
+      linear-gradient(to top right, transparent 49.3%, #EFC7D4 50%, transparent 50.7%) left / 50% 100% no-repeat,
+      linear-gradient(to top left,  transparent 49.3%, #EFC7D4 50%, transparent 50.7%) right / 50% 100% no-repeat;
+  }
+  .solapa {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 80px;
+    background: #F4C6D5;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .8s ease;
+    z-index: 2;
+  }
+  .intro.saliendo .solapa { transform: rotateX(180deg); }
+  .sello {
+    position: absolute;
+    left: 50%;
+    top: 62px;
+    translate: -50% -50%;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--rosa);
+    color: #FFFFFF;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    z-index: 3;
+  }
+
+  /* ================= BOTONES ================= */
+  .btn {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.3rem;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 999px;
+    background: var(--rosa);
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: transform .15s ease, filter .15s ease;
+    touch-action: manipulation;
+  }
+  .btn:hover { filter: brightness(1.07); }
+  .btn:active { transform: scale(.96); }
+  .btn:focus-visible { outline: 3px solid var(--petalo); outline-offset: 3px; }
+  .btn.secundario { background: transparent; color: var(--vino); box-shadow: inset 0 0 0 2px var(--rosa); }
+
+  /* ================= CONTADOR ================= */
+  .contador {
+    width: 100%;
+    padding: 14px 12px 12px;
+    border-radius: 18px;
+    background: var(--tarjeta);
+  }
+  .contador-titulo { margin: 0 0 8px; font-style: italic; font-size: 1.15rem; }
+  .contador-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 6px;
+  }
+  .unidad { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .unidad .num {
+    font-weight: 600;
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+    font-variant-numeric: tabular-nums;
+    color: var(--rosa);
+  }
+  .unidad .lbl { font-style: italic; font-size: .95rem; margin-top: 3px; }
+  .contador-total { margin: 10px 0 0; font-size: 1.1rem; }
+  .contador-total strong { color: var(--rosa); font-variant-numeric: tabular-nums; }
+
+  /* ================= JARDÍN ================= */
   .jardin { position: relative; width: 78%; }
   .jardin::before {
     content: "";
@@ -101,10 +216,11 @@
     inset: 8% 10% 22%;
     background: radial-gradient(circle, var(--brillo) 0%, transparent 70%);
     z-index: 0;
+    transition: opacity 2s ease;
   }
-  svg { position: relative; z-index: 1; display: block; width: 100%; height: auto; overflow: visible; }
+  :root.noche .jardin::before { opacity: 1.6; }
+  .jardin svg { position: relative; z-index: 1; display: block; width: 100%; height: auto; overflow: visible; }
 
-  /* ===== Crecimiento de la planta ===== */
   #tallo {
     transform-box: fill-box;
     transform-origin: center bottom;
@@ -114,6 +230,7 @@
   #cabeza { transition: transform .9s cubic-bezier(.34, 1.3, .64, 1); }
   #flor-mece.meciendo { animation: mecer 3.5s ease-in-out infinite alternate; }
   @keyframes mecer { from { rotate: -5deg; } to { rotate: 5deg; } }
+  #flor-mece.meciendo #petalos { filter: drop-shadow(0 0 10px #FFD54F); }
   #hoja1, #hoja2 {
     transform-box: fill-box;
     transform: scale(0);
@@ -127,7 +244,19 @@
   }
   #semilla { transition: opacity .5s ease; }
 
-  /* ===== Tarjeta del elogio ===== */
+  /* Ramo: las flores anteriores se quedan al lado de la maceta */
+  .ramo { position: absolute; left: 0; right: 0; bottom: 1%; height: 24%; z-index: 2; pointer-events: none; }
+  .mini-flor {
+    position: absolute;
+    bottom: 0;
+    width: 13%;
+    transform-origin: bottom center;
+    animation: brotar .9s cubic-bezier(.34, 1.4, .64, 1) both;
+  }
+  .mini-flor svg { display: block; width: 100%; height: auto; }
+  @keyframes brotar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+  /* ================= ELOGIO ================= */
   .tarjeta {
     width: 100%;
     min-height: 5.6em;
@@ -157,26 +286,105 @@
     from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
     to   { opacity: 1; transform: none; filter: none; }
   }
+  #progreso, #ramo-texto { margin: 0; font-size: 1.1rem; font-style: italic; opacity: .85; }
 
-  #regar {
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 1.3rem;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 999px;
-    background: var(--rosa);
-    color: #FFFFFF;
-    cursor: pointer;
-    transition: transform .15s ease, filter .15s ease;
+  /* ================= SORPRESAS ================= */
+  .oculto { display: none !important; }
+  .revelar { animation: aparecer .9s ease both; }
+  .bloque {
+    width: 100%;
+    padding: 18px 16px;
+    border-radius: 18px;
+    background: var(--tarjeta);
   }
-  #regar:hover { filter: brightness(1.07); }
-  #regar:active { transform: scale(.96); }
-  #regar:focus-visible { outline: 3px solid var(--petalo); outline-offset: 3px; }
+  .bloque h3 {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 10vw, 2.7rem);
+    line-height: 1.05;
+    margin: 0 0 6px;
+    color: var(--rosa);
+  }
+  .bloque p { margin: 0; font-size: 1.15rem; line-height: 1.4; }
 
+  .perdon-zona { position: relative; width: 100%; height: 130px; margin-top: 8px; }
+  #btn-si, #btn-no { position: absolute; top: 38%; }
+  #btn-si { left: 12%; }
+  #btn-no { left: 58%; transition: left .25s ease, top .25s ease; }
+  #respuesta { font-style: italic; font-size: 1.25rem; }
+
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 14px;
+    margin-top: 12px;
+  }
+  .polaroid {
+    background: #FFFFFF;
+    padding: 8px 8px 10px;
+    border-radius: 4px;
+    box-shadow: 0 8px 20px #00000026;
+    color: #5A2A3C;
+  }
+  .polaroid:nth-child(1) { rotate: -4deg; }
+  .polaroid:nth-child(2) { rotate: 3deg; }
+  .polaroid:nth-child(3) { rotate: 2deg; }
+  .polaroid:nth-child(4) { rotate: -3deg; }
+  .polaroid img, .polaroid .sin-foto {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  .polaroid .sin-foto {
+    background: #FBE3EB;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+  }
+  .polaroid figcaption {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-size: 1.35rem;
+    margin-top: 6px;
+    line-height: 1;
+  }
+
+  /* ================= CARTA ================= */
+  dialog.carta {
+    width: min(92vw, 440px);
+    max-height: 86vh;
+    border: none;
+    border-radius: 14px;
+    padding: 28px 24px 22px;
+    background: var(--papel);
+    color: #5A1F36;
+    box-shadow: 0 20px 60px #00000055;
+    text-align: left;
+  }
+  dialog.carta[open] { animation: abrirCarta .6s cubic-bezier(.34, 1.3, .64, 1) both; }
+  @keyframes abrirCarta { from { opacity: 0; transform: translateY(30px) scale(.94); } to { opacity: 1; transform: none; } }
+  dialog.carta::backdrop { background: #1A0B1499; }
+  .carta h4 {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-weight: 400;
+    font-size: 2.4rem;
+    margin: 0 0 10px;
+    color: #C23E6A;
+  }
+  .carta p { font-size: 1.2rem; line-height: 1.55; margin: 0 0 12px; }
+  .carta .firma {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-size: 2rem;
+    text-align: right;
+    color: #C23E6A;
+    margin-top: 6px;
+  }
+  .carta form { text-align: center; margin-top: 8px; }
+
+  /* ================= CANCIÓN ================= */
   .cancion {
     width: 100%;
-    margin-top: 6px;
     padding: 12px 16px;
     border-radius: 18px;
     background: var(--tarjeta);
@@ -186,90 +394,112 @@
   }
   .cancion-info { display: flex; align-items: center; gap: 12px; text-align: left; }
   .cancion-icono {
-    flex: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #1DB954;
-    color: #FFFFFF;
-    display: grid;
-    place-items: center;
-    font-size: 1.3rem;
+    flex: none; width: 44px; height: 44px; border-radius: 50%;
+    background: #1DB954; color: #FFFFFF; display: grid; place-items: center; font-size: 1.3rem;
   }
   .cancion-titulo { margin: 0; font-weight: 600; font-size: 1.2rem; line-height: 1.2; }
   .cancion-artista { margin: 0; font-style: italic; font-size: 1rem; opacity: .8; }
   .cancion-link {
-    align-self: center;
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: #FFFFFF;
-    background: #1DB954;
-    padding: 8px 20px;
-    border-radius: 999px;
-    text-decoration: none;
+    align-self: center; font-weight: 600; font-size: 1.05rem; color: #FFFFFF;
+    background: #1DB954; padding: 8px 20px; border-radius: 999px; text-decoration: none;
   }
-  .cancion-link:hover { filter: brightness(1.07); }
   .cancion-link:focus-visible { outline: 3px solid var(--petalo); outline-offset: 3px; }
-  #reproductor iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 12px; }
+  #reproductor iframe { display: block; width: 100%; border: 0; border-radius: 12px; }
 
-  #progreso { margin: 0; font-size: 1.1rem; font-style: italic; opacity: .8; }
+  /* ================= CIELO NOCTURNO ================= */
+  #cielo { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .estrella {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  :root.noche .estrella { opacity: .9; animation: titilar 2.5s ease-in-out infinite alternate; }
+  @keyframes titilar { from { opacity: .25; } to { opacity: 1; } }
+  #luna {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 22px);
+    right: 22px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #FFF4C9;
+    box-shadow: 0 0 30px 8px #FFF4C966, inset -12px -6px 0 0 #F2E3A6;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 2s ease, transform 2s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  :root.noche #luna { opacity: 1; transform: none; }
 
-  /* ===== Gotas, corazones y pétalos ===== */
+  /* ================= EFECTOS ================= */
   .gota {
-    position: absolute;
-    top: 0;
-    width: 9px;
-    height: 13px;
-    background: #7EC3EC;
+    position: absolute; top: 0; width: 9px; height: 13px; background: #7EC3EC;
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    pointer-events: none;
-    z-index: 2;
-    animation: caer .9s ease-in forwards;
+    pointer-events: none; z-index: 3; animation: caer .9s ease-in forwards;
   }
-  @keyframes caer {
-    0%   { top: 0;   opacity: 0; }
-    15%  { opacity: 1; }
-    100% { top: 76%; opacity: 0; }
-  }
+  @keyframes caer { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 100% { top: 76%; opacity: 0; } }
   .corazon {
-    position: absolute;
-    bottom: 30%;
-    font-size: 1.3rem;
-    pointer-events: none;
-    z-index: 2;
+    position: absolute; bottom: 30%; font-size: 1.3rem; pointer-events: none; z-index: 3;
     animation: subir 1.8s ease-out forwards;
   }
   @keyframes subir {
     from { transform: translate(0, 0) scale(.6); opacity: 0; }
-    20%  { opacity: 1; }
-    to   { transform: translate(var(--dx), -170px) scale(1.1); opacity: 0; }
+    20% { opacity: 1; }
+    to { transform: translate(var(--dx), -170px) scale(1.1); opacity: 0; }
   }
-  .petalo-cae {
-    position: fixed;
-    top: -30px;
-    pointer-events: none;
-    animation: flotar linear forwards;
-  }
-  .petalo-cae.p {
-    width: 14px;
-    height: 22px;
-    background: var(--petalo);
+  .cae { position: fixed; top: -30px; pointer-events: none; z-index: 60; animation: flotar linear forwards; }
+  .cae.p {
+    width: 14px; height: 22px; background: var(--petalo);
     border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
   }
-  @keyframes flotar {
-    to { transform: translate(var(--deriva), 110vh) rotate(540deg); }
-  }
+  @keyframes flotar { to { transform: translate(var(--deriva), 110vh) rotate(540deg); } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
-<body>
+<body class="bloqueado">
+
+<!-- Cielo nocturno (estrellas + luna) -->
+<div id="cielo" aria-hidden="true"></div>
+<div id="luna" aria-hidden="true"></div>
+
+<!-- Pantalla de inicio -->
+<div class="intro" id="intro">
+  <h2>Ashly, tengo algo para ti</h2>
+  <div class="sobre" aria-hidden="true">
+    <div class="solapa"></div>
+    <div class="sello">♥</div>
+  </div>
+  <button class="btn" id="btn-abrir" type="button">Abrir 💌</button>
+</div>
+
 <main class="escena">
   <h1>Para Ashly</h1>
   <p class="disculpa">Perdóname por no haberte dado nada el día de las flores amarillas. Por eso te hice esta, que nunca se va a marchitar.</p>
 
+  <!-- Contador -->
+  <section class="contador" aria-label="Tiempo juntos">
+    <p class="contador-titulo">Llevamos juntos</p>
+    <div class="contador-grid">
+      <div class="unidad"><span class="num" id="c-anios">0</span><span class="lbl" id="l-anios">años</span></div>
+      <div class="unidad"><span class="num" id="c-meses">0</span><span class="lbl" id="l-meses">meses</span></div>
+      <div class="unidad"><span class="num" id="c-dias">0</span><span class="lbl" id="l-dias">días</span></div>
+      <div class="unidad"><span class="num" id="c-horas">0</span><span class="lbl" id="l-horas">horas</span></div>
+      <div class="unidad"><span class="num" id="c-min">0</span><span class="lbl" id="l-min">minutos</span></div>
+      <div class="unidad"><span class="num" id="c-seg">0</span><span class="lbl" id="l-seg">segundos</span></div>
+    </div>
+    <p class="contador-total"><strong id="c-total">0</strong> días a tu lado</p>
+  </section>
+
+  <!-- Jardín -->
   <div class="jardin" id="jardin">
     <svg viewBox="0 0 300 400" role="img" aria-label="Una flor amarilla creciendo en una maceta">
       <defs>
@@ -278,15 +508,9 @@
           <stop offset="100%" stop-color="var(--petalo-claro)"/>
         </radialGradient>
       </defs>
-
-      <!-- Tallo (nace en y=330, alto máximo 240) -->
       <rect id="tallo" x="147" y="90" width="6" height="240" rx="3" fill="var(--tallo)"/>
-
-      <!-- Hojas -->
       <path id="hoja1" d="M150 258 C122 250 104 230 98 210 C122 210 146 232 150 258 Z" fill="var(--hoja)"/>
       <path id="hoja2" d="M150 204 C178 196 196 176 202 156 C178 156 154 178 150 204 Z" fill="var(--hoja)"/>
-
-      <!-- Flor (la cabeza se mueve a la punta del tallo) -->
       <g id="cabeza" style="transform: translate(150px, 330px)">
         <g id="flor-mece">
           <g id="boton-flor">
@@ -307,13 +531,10 @@
               <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(324)"/>
             </g>
             <circle r="16" fill="var(--centro)"/>
-            <!-- Corazón dorado en el centro -->
             <path d="M0 7 C-10 0 -9 -8 -4 -8 C-2 -8 0 -6 0 -4 C0 -6 2 -8 4 -8 C9 -8 10 0 0 7 Z" fill="var(--petalo)"/>
           </g>
         </g>
       </g>
-
-      <!-- Maceta blanca con corazón -->
       <ellipse cx="150" cy="332" rx="62" ry="10" fill="var(--tierra)"/>
       <ellipse id="semilla" cx="150" cy="330" rx="7" ry="4.5" fill="#9A6B3D"/>
       <path d="M86 334 L214 334 L200 396 L100 396 Z" fill="var(--maceta)"/>
@@ -321,15 +542,41 @@
       <rect x="80" y="326" width="140" height="14" rx="5" fill="var(--maceta)"/>
       <path d="M150 382 C132 370 132 355 142 355 C146 355 150 359 150 362 C150 359 154 355 158 355 C168 355 168 370 150 382 Z" fill="var(--rosa)"/>
     </svg>
+    <div class="ramo" id="ramo"></div>
   </div>
 
   <div class="tarjeta">
     <p id="elogio" aria-live="polite">Riega la flor, Ashly, y mira lo que pasa…</p>
   </div>
 
-  <button id="regar" type="button">Regar la flor 💧</button>
+  <button class="btn" id="regar" type="button">Regar la flor 💧</button>
   <p id="progreso">La semilla espera por ti</p>
+  <p id="ramo-texto" class="oculto"></p>
 
+  <!-- ¿Me perdonas? (aparece cuando la flor abre por primera vez) -->
+  <section class="bloque oculto" id="sorpresa-perdon">
+    <h3>¿Me perdonas?</h3>
+    <p>Por no haberte dado nada el día de las flores amarillas.</p>
+    <div class="perdon-zona" id="perdon-zona">
+      <button class="btn" id="btn-si" type="button">Sí 💛</button>
+      <button class="btn secundario" id="btn-no" type="button">No</button>
+    </div>
+    <p id="respuesta" class="oculto" aria-live="polite"></p>
+  </section>
+
+  <!-- Fotos y carta (aparecen después del "sí") -->
+  <section class="bloque oculto" id="sorpresa-fotos">
+    <h3>Nosotros</h3>
+    <div class="galeria" id="galeria"></div>
+  </section>
+
+  <section class="bloque oculto" id="sorpresa-carta">
+    <h3>Una carta para ti</h3>
+    <p>Hay algo que quiero decirte con calma.</p>
+    <p style="margin-top: 14px;"><button class="btn" id="btn-carta" type="button">Abrir la carta 💌</button></p>
+  </section>
+
+  <!-- Canción -->
   <section class="cancion" aria-label="Nuestra canción">
     <div class="cancion-info">
       <div class="cancion-icono" aria-hidden="true">♫</div>
@@ -343,43 +590,34 @@
   </section>
 </main>
 
+<!-- Carta -->
+<dialog class="carta" id="carta">
+  <h4>Ashly:</h4>
+  <p>Sé que el día de las flores amarillas no te di nada, y de verdad lo siento. No fue porque no pensara en ti; pienso en ti todos los días.</p>
+  <p>Por eso quise hacerte esta flor: una que no se marchita, que puedes regar cuantas veces quieras y que siempre te va a recordar lo mucho que te quiero.</p>
+  <p>Gracias por estos <strong id="dias-carta">479</strong> días juntos, por tu paciencia, por tu risa y por elegirme cada día. Contigo todo es más bonito.</p>
+  <p>Te amo, hoy y siempre.</p>
+  <p class="firma" id="firma">Andrés</p>
+  <form method="dialog"><button class="btn" type="submit">Cerrar 💛</button></form>
+</dialog>
+
 <script>
+  /* =====================================================================
+     ✏️ DATOS PARA PERSONALIZAR
+     ===================================================================== */
   const NOMBRE = "Ashly";
+  const FIRMA = "Andrés";
+  // Día en que empezaron (año, mes - 1, día): 1 de junio de 2025 = hace 479 días
+  const FECHA_INICIO = new Date(2025, 5, 1, 0, 0, 0);
 
-  // 🎵 true = muestra el reproductor de Spotify dentro de la página (usar en GitHub Pages)
-  const USAR_REPRODUCTOR = true;
-  let controlSpotify = null;   // control del reproductor (para darle play desde el botón)
-  let musicaIniciada = false;
+  // Fotos: súbelas al repositorio con estos nombres (foto1.jpg, foto2.jpg...)
+  const FOTOS = [
+    { src: "foto1.jpg", texto: "Tú y yo" },
+    { src: "foto2.jpg", texto: "Mi lugar favorito" },
+    { src: "foto3.jpg", texto: "Esa sonrisa" },
+    { src: "foto4.jpg", texto: "Siempre juntos" },
+  ];
 
-  if (USAR_REPRODUCTOR) {
-    // Se oculta el botón que abre Spotify: la canción suena dentro de la página
-    document.querySelector(".cancion-link").hidden = true;
-
-    // API oficial de Spotify para controlar el reproductor desde JavaScript
-    window.onSpotifyIframeApiReady = (IFrameAPI) => {
-      const contenedor = document.createElement("div");
-      document.getElementById("reproductor").appendChild(contenedor);
-      IFrameAPI.createController(
-        contenedor,
-        { uri: "spotify:track:7ynTwByYTgs1UsWoQvWdvI", width: "100%", height: 152 },
-        (control) => { controlSpotify = control; }
-      );
-    };
-    const script = document.createElement("script");
-    script.src = "https://open.spotify.com/embed/iframe-api/v1";
-    script.async = true;
-    document.body.appendChild(script);
-  }
-
-  // La canción empieza con el primer riego
-  function iniciarMusica() {
-    if (controlSpotify && !musicaIniciada) {
-      controlSpotify.play();
-      musicaIniciada = true;
-    }
-  }
-
-  // ✏️ Los elogios salen en orden, uno por cada vez que presiona el botón
   const ELOGIOS = [
     "Tu sonrisa ilumina hasta el día más gris.",
     "Eres la persona más bonita que he conocido, por dentro y por fuera.",
@@ -394,8 +632,17 @@
     "Me haces querer ser mejor persona cada día.",
     "Si pudiera elegir otra vez, te elegiría a ti. Siempre.",
   ];
+  const MENSAJE_FINAL = `Te amo, ${NOMBRE} 💛`;
 
-  // Etapas de crecimiento de la flor
+  // 🎵 true = reproductor de Spotify dentro de la página (versión GitHub Pages)
+  const USAR_REPRODUCTOR = true;
+
+  /* =====================================================================
+     ESTADO Y UTILIDADES
+     ===================================================================== */
+  const $ = (id) => document.getElementById(id);
+  const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const ETAPAS = [
     { alto: 0,   hoja1: 0, hoja2: 0, boton: 0,    petalos: 0 },
     { alto: 30,  hoja1: 0, hoja2: 0, boton: 0.35, petalos: 0 },
@@ -409,11 +656,96 @@
   const ALTO_MAX = 240;
   const SUELO = 330;
 
-  const $ = (id) => document.getElementById(id);
-  const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let etapa = 0;
   let indiceElogio = 0;
+  let floresRegaladas = 0;
+  let yaFlorecio = false;
+  let intentosNo = 0;
 
+  document.querySelector("#firma").textContent = FIRMA;
+
+  /* =====================================================================
+     1. CONTADOR DE TIEMPO JUNTOS
+     ===================================================================== */
+  function diferencia(desde, hasta) {
+    let anios = hasta.getFullYear() - desde.getFullYear();
+    let meses = hasta.getMonth() - desde.getMonth();
+    let dias = hasta.getDate() - desde.getDate();
+    let horas = hasta.getHours() - desde.getHours();
+    let minutos = hasta.getMinutes() - desde.getMinutes();
+    let segundos = hasta.getSeconds() - desde.getSeconds();
+    if (segundos < 0) { segundos += 60; minutos--; }
+    if (minutos < 0) { minutos += 60; horas--; }
+    if (horas < 0) { horas += 24; dias--; }
+    if (dias < 0) { dias += new Date(hasta.getFullYear(), hasta.getMonth(), 0).getDate(); meses--; }
+    if (meses < 0) { meses += 12; anios--; }
+    return { anios, meses, dias, horas, minutos, segundos };
+  }
+  const plural = (n, uno, varios) => (n === 1 ? uno : varios);
+
+  function actualizarContador() {
+    const ahora = new Date();
+    const t = diferencia(FECHA_INICIO, ahora);
+    $("c-anios").textContent = t.anios;   $("l-anios").textContent = plural(t.anios, "año", "años");
+    $("c-meses").textContent = t.meses;   $("l-meses").textContent = plural(t.meses, "mes", "meses");
+    $("c-dias").textContent = t.dias;     $("l-dias").textContent = plural(t.dias, "día", "días");
+    $("c-horas").textContent = t.horas;   $("l-horas").textContent = plural(t.horas, "hora", "horas");
+    $("c-min").textContent = t.minutos;   $("l-min").textContent = plural(t.minutos, "minuto", "minutos");
+    $("c-seg").textContent = t.segundos;  $("l-seg").textContent = plural(t.segundos, "segundo", "segundos");
+    const totalDias = Math.floor((ahora - FECHA_INICIO) / 86400000);
+    $("c-total").textContent = totalDias.toLocaleString("es-CO");
+    $("dias-carta").textContent = totalDias.toLocaleString("es-CO");
+  }
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+
+  /* =====================================================================
+     2. MÚSICA (Spotify)
+     ===================================================================== */
+  let controlSpotify = null;
+  let musicaIniciada = false;
+  let musicaPendiente = false;
+
+  if (USAR_REPRODUCTOR) {
+    document.querySelector(".cancion-link").hidden = true;
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+      const contenedor = document.createElement("div");
+      $("reproductor").appendChild(contenedor);
+      IFrameAPI.createController(
+        contenedor,
+        { uri: "spotify:track:7ynTwByYTgs1UsWoQvWdvI", width: "100%", height: 152 },
+        (control) => {
+          controlSpotify = control;
+          if (musicaPendiente) iniciarMusica();
+        }
+      );
+    };
+    const script = document.createElement("script");
+    script.src = "https://open.spotify.com/embed/iframe-api/v1";
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  function iniciarMusica() {
+    if (musicaIniciada || !USAR_REPRODUCTOR) return;
+    if (!controlSpotify) { musicaPendiente = true; return; }
+    controlSpotify.play();
+    musicaIniciada = true;
+  }
+
+  /* =====================================================================
+     3. PANTALLA DE INICIO
+     ===================================================================== */
+  $("btn-abrir").addEventListener("click", () => {
+    iniciarMusica();
+    $("intro").classList.add("saliendo");
+    document.body.classList.remove("bloqueado");
+    setTimeout(() => $("intro").remove(), 1000);
+  });
+
+  /* =====================================================================
+     4. LA FLOR
+     ===================================================================== */
   function dibujar() {
     const e = ETAPAS[etapa];
     $("tallo").style.transform = `scaleY(${e.alto / ALTO_MAX})`;
@@ -424,15 +756,11 @@
     $("petalos").style.transform = `scale(${e.petalos})`;
     $("semilla").style.opacity = etapa === 0 ? 1 : 0;
     $("flor-mece").classList.toggle("meciendo", etapa === ULTIMA);
-
     $("progreso").textContent = etapa === ULTIMA
       ? `Esta flor amarilla es tuya, ${NOMBRE} 💛`
       : etapa === 0 ? "La semilla espera por ti" : `Va creciendo… ${etapa} de ${ULTIMA}`;
     $("regar").textContent = etapa === ULTIMA ? "Sembrar otra vez 🌱" : "Regar la flor 💧";
   }
-
-  // 💛 El último mensaje, cuando la flor abre, siempre es este
-  const MENSAJE_FINAL = `Te amo, ${NOMBRE} 💛`;
 
   function mostrarElogio(esFinal) {
     const el = $("elogio");
@@ -444,10 +772,62 @@
     }
     el.classList.toggle("te-amo", esFinal);
     el.classList.remove("aparece");
-    void el.offsetWidth; // reinicia la animación
+    void el.offsetWidth;
     el.classList.add("aparece");
   }
 
+  /* =====================================================================
+     5. CIELO DE NOCHE
+     ===================================================================== */
+  (function crearEstrellas() {
+    const cielo = $("cielo");
+    for (let i = 0; i < 45; i++) {
+      const s = document.createElement("span");
+      s.className = "estrella";
+      s.style.left = `${Math.random() * 100}%`;
+      s.style.top = `${Math.random() * 70}%`;
+      s.style.animationDelay = `${Math.random() * 2.5}s`;
+      if (Math.random() < 0.25) { s.style.width = "4px"; s.style.height = "4px"; }
+      cielo.appendChild(s);
+    }
+  })();
+  const ponerNoche = (activa) => document.documentElement.classList.toggle("noche", activa);
+
+  /* =====================================================================
+     6. RAMO: cada flor que florece se queda al lado de la maceta
+     ===================================================================== */
+  const POSICIONES_RAMO = [2, 85, 13, 74];
+  const MINI_FLOR = `
+    <svg viewBox="0 0 40 90" aria-hidden="true">
+      <rect x="18.8" y="28" width="2.5" height="62" fill="#3E8A4A"/>
+      <path d="M20 64 C12 60 8 54 7 48 C14 49 19 56 20 64 Z" fill="#5DAE55"/>
+      <g fill="#FFC61A" stroke="#E4A100" stroke-width=".8">
+        <circle cx="29" cy="22" r="7"/><circle cx="24.5" cy="29.8" r="7"/><circle cx="15.5" cy="29.8" r="7"/>
+        <circle cx="11" cy="22" r="7"/><circle cx="15.5" cy="14.2" r="7"/><circle cx="24.5" cy="14.2" r="7"/>
+      </g>
+      <circle cx="20" cy="22" r="5" fill="#8A4B10"/>
+    </svg>`;
+
+  function agregarAlRamo() {
+    floresRegaladas++;
+    if (floresRegaladas <= POSICIONES_RAMO.length) {
+      const flor = document.createElement("div");
+      flor.className = "mini-flor";
+      flor.style.left = `${POSICIONES_RAMO[floresRegaladas - 1]}%`;
+      flor.style.scale = `${1 - (floresRegaladas > 2 ? 0.15 : 0)}`;
+      flor.innerHTML = MINI_FLOR;
+      $("ramo").appendChild(flor);
+    }
+    const t = $("ramo-texto");
+    t.classList.remove("oculto");
+    t.textContent = floresRegaladas === 1
+      ? "Ya tienes 1 flor amarilla en tu ramo"
+      : `Ya tienes ${floresRegaladas} flores amarillas en tu ramo`;
+  }
+
+  /* =====================================================================
+     7. EFECTOS: gotas, corazones y lluvia
+     ===================================================================== */
   function gotas() {
     if (reducirMovimiento) return;
     [-16, 0, 16].forEach((dx, i) => {
@@ -459,28 +839,26 @@
       setTimeout(() => g.remove(), 1400);
     });
   }
-
   function corazones() {
     if (reducirMovimiento) return;
-    for (let i = 0; i < 3; i++) {
+    ["💛", "💗", "💕"].forEach((emoji, i) => {
       const c = document.createElement("span");
       c.className = "corazon";
-      c.textContent = ["💛", "💗", "💕"][i];
+      c.textContent = emoji;
       c.style.left = `calc(50% + ${(i - 1) * 22}px - 10px)`;
       c.style.setProperty("--dx", `${(i - 1) * 30}px`);
       c.style.animationDelay = `${0.4 + i * 0.15}s`;
       $("jardin").appendChild(c);
       setTimeout(() => c.remove(), 2800);
-    }
+    });
   }
-
-  function lluviaFinal() {
+  function lluvia(cantidad, soloCorazones) {
     if (reducirMovimiento) return;
-    for (let i = 0; i < 26; i++) {
+    for (let i = 0; i < cantidad; i++) {
       const p = document.createElement("span");
-      const esCorazon = i % 3 === 0;
-      p.className = "petalo-cae" + (esCorazon ? "" : " p");
-      if (esCorazon) { p.textContent = "💛"; p.style.fontSize = "1.2rem"; }
+      const esCorazon = soloCorazones || i % 3 === 0;
+      p.className = "cae" + (esCorazon ? "" : " p");
+      if (esCorazon) { p.textContent = ["💛", "💗", "💕"][i % 3]; p.style.fontSize = "1.3rem"; }
       p.style.left = `${Math.random() * 100}vw`;
       p.style.setProperty("--deriva", `${(Math.random() - 0.5) * 160}px`);
       const duracion = 3.5 + Math.random() * 3;
@@ -490,7 +868,16 @@
       setTimeout(() => p.remove(), (duracion + 1.5) * 1000);
     }
   }
+  function revelar(id) {
+    const el = $(id);
+    el.classList.remove("oculto");
+    el.classList.add("revelar");
+    setTimeout(() => el.scrollIntoView({ behavior: reducirMovimiento ? "auto" : "smooth", block: "center" }), 150);
+  }
 
+  /* =====================================================================
+     8. BOTÓN PRINCIPAL
+     ===================================================================== */
   $("regar").addEventListener("click", () => {
     iniciarMusica();
     if (etapa < ULTIMA) {
@@ -499,12 +886,84 @@
       gotas();
       corazones();
       dibujar();
-      if (etapa === ULTIMA) setTimeout(lluviaFinal, 600);
+      if (etapa === ULTIMA) {
+        ponerNoche(true);
+        setTimeout(() => lluvia(26, false), 600);
+        if (!yaFlorecio) {
+          yaFlorecio = true;
+          setTimeout(() => revelar("sorpresa-perdon"), 3200);
+        }
+      }
     } else {
       etapa = 0;
+      ponerNoche(false);
+      agregarAlRamo();
       mostrarElogio(false);
       dibujar();
     }
+  });
+
+  /* =====================================================================
+     9. ¿ME PERDONAS? (el "No" se escapa)
+     ===================================================================== */
+  function moverNo(e) {
+    if (intentosNo >= 6) return;
+    if (e) e.preventDefault();
+    intentosNo++;
+    const zona = $("perdon-zona").getBoundingClientRect();
+    const btn = $("btn-no");
+    const maxX = Math.max(0, zona.width - btn.offsetWidth);
+    const maxY = Math.max(0, zona.height - btn.offsetHeight);
+    btn.style.left = `${Math.random() * maxX}px`;
+    btn.style.top = `${Math.random() * maxY}px`;
+    if (intentosNo >= 6) {
+      btn.textContent = "Bueno, sí 💛";
+      btn.classList.remove("secundario");
+    }
+  }
+  $("btn-no").addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") moverNo(); });
+  $("btn-no").addEventListener("pointerdown", (e) => { if (intentosNo < 6) moverNo(e); });
+  $("btn-no").addEventListener("click", (e) => { if (intentosNo >= 6) decirSi(); else moverNo(e); });
+  $("btn-si").addEventListener("click", decirSi);
+
+  function decirSi() {
+    $("perdon-zona").classList.add("oculto");
+    const r = $("respuesta");
+    r.textContent = "Sabía que dirías que sí. Gracias, mi amor. Te prometo que el próximo año vas a tener un ramo de verdad 💛";
+    r.classList.remove("oculto");
+    r.classList.add("revelar");
+    lluvia(40, true);
+    setTimeout(() => revelar("sorpresa-fotos"), 1800);
+    setTimeout(() => $("sorpresa-carta").classList.remove("oculto"), 1800);
+    setTimeout(() => $("sorpresa-carta").classList.add("revelar"), 1800);
+  }
+
+  /* =====================================================================
+     10. FOTOS Y CARTA
+     ===================================================================== */
+  FOTOS.forEach((f) => {
+    const fig = document.createElement("figure");
+    fig.className = "polaroid";
+    fig.style.margin = "0";
+    const img = document.createElement("img");
+    img.src = f.src;
+    img.alt = f.texto;
+    img.loading = "lazy";
+    img.onerror = () => {
+      const vacio = document.createElement("div");
+      vacio.className = "sin-foto";
+      vacio.textContent = "💛";
+      img.replaceWith(vacio);
+    };
+    const cap = document.createElement("figcaption");
+    cap.textContent = f.texto;
+    fig.append(img, cap);
+    $("galeria").appendChild(fig);
+  });
+
+  $("btn-carta").addEventListener("click", () => {
+    $("carta").showModal();
+    lluvia(14, true);
   });
 
   dibujar();
