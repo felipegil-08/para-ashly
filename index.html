@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para Ashly 💛</title>
+<meta name="description" content="Una flor amarilla que crece solo para ti.">
+<meta property="og:title" content="Para Ashly 💛">
+<meta property="og:description" content="Una flor amarilla que crece solo para ti. Ábrela y riégala 🌼">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  /* ===== Paleta romántica (se adapta a modo claro / oscuro) ===== */
+  :root {
+    --fondo: #F8DCE5;
+    --brillo: #FFF3F6;
+    --vino: #7A1F42;
+    --rosa: #D9507A;
+    --maceta: #FFFFFF;
+    --maceta-sombra: #EFC7D4;
+    --tierra: #5E3B2B;
+    --tallo: #3E8A4A;
+    --hoja: #5DAE55;
+    --petalo-claro: #FFE680;
+    --petalo: #FFC61A;
+    --petalo-borde: #E4A100;
+    --centro: #8A4B10;
+    --tarjeta: #FFFFFFB3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: #2B1320;
+      --brillo: #4A2034;
+      --vino: #F8D3E0;
+      --rosa: #F07FA3;
+      --maceta-sombra: #C99AAB;
+      --tarjeta: #3A1A2B99;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo: #2B1320;
+    --brillo: #4A2034;
+    --vino: #F8D3E0;
+    --rosa: #F07FA3;
+    --maceta-sombra: #C99AAB;
+    --tarjeta: #3A1A2B99;
+  }
+
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--fondo);
+    color: var(--vino);
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .escena {
+    margin: auto;
+    width: min(92vw, 400px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  h1 {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-weight: 400;
+    font-size: clamp(3.2rem, 15vw, 4.4rem);
+    line-height: 1;
+    margin: 0;
+    color: var(--rosa);
+  }
+
+  .disculpa {
+    margin: 0 0 4px;
+    max-width: 34ch;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.05rem, 4.4vw, 1.2rem);
+    line-height: 1.4;
+    opacity: .9;
+  }
+
+  .jardin { position: relative; width: 78%; }
+  .jardin::before {
+    content: "";
+    position: absolute;
+    inset: 8% 10% 22%;
+    background: radial-gradient(circle, var(--brillo) 0%, transparent 70%);
+    z-index: 0;
+  }
+  svg { position: relative; z-index: 1; display: block; width: 100%; height: auto; overflow: visible; }
+
+  /* ===== Crecimiento de la planta ===== */
+  #tallo {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    transform: scaleY(0);
+    transition: transform .9s cubic-bezier(.34, 1.3, .64, 1);
+  }
+  #cabeza { transition: transform .9s cubic-bezier(.34, 1.3, .64, 1); }
+  #flor-mece.meciendo { animation: mecer 3.5s ease-in-out infinite alternate; }
+  @keyframes mecer { from { rotate: -5deg; } to { rotate: 5deg; } }
+  #hoja1, #hoja2 {
+    transform-box: fill-box;
+    transform: scale(0);
+    transition: transform .7s cubic-bezier(.34, 1.5, .64, 1);
+  }
+  #hoja1 { transform-origin: right bottom; }
+  #hoja2 { transform-origin: left bottom; }
+  #boton-flor, #petalos {
+    transform: scale(0);
+    transition: transform .9s cubic-bezier(.34, 1.4, .64, 1);
+  }
+  #semilla { transition: opacity .5s ease; }
+
+  /* ===== Tarjeta del elogio ===== */
+  .tarjeta {
+    width: 100%;
+    min-height: 5.6em;
+    padding: 14px 20px;
+    border-radius: 18px;
+    background: var(--tarjeta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #elogio {
+    margin: 0;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.25rem, 5.2vw, 1.5rem);
+    line-height: 1.35;
+  }
+  #elogio.aparece { animation: aparecer .7s ease both; }
+  #elogio.te-amo {
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-style: normal;
+    font-size: clamp(2.6rem, 12vw, 3.2rem);
+    line-height: 1;
+    color: var(--rosa);
+  }
+  @keyframes aparecer {
+    from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
+    to   { opacity: 1; transform: none; filter: none; }
+  }
+
+  #regar {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.3rem;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 999px;
+    background: var(--rosa);
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: transform .15s ease, filter .15s ease;
+  }
+  #regar:hover { filter: brightness(1.07); }
+  #regar:active { transform: scale(.96); }
+  #regar:focus-visible { outline: 3px solid var(--petalo); outline-offset: 3px; }
+
+  .cancion {
+    width: 100%;
+    margin-top: 6px;
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: var(--tarjeta);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cancion-info { display: flex; align-items: center; gap: 12px; text-align: left; }
+  .cancion-icono {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1DB954;
+    color: #FFFFFF;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+  }
+  .cancion-titulo { margin: 0; font-weight: 600; font-size: 1.2rem; line-height: 1.2; }
+  .cancion-artista { margin: 0; font-style: italic; font-size: 1rem; opacity: .8; }
+  .cancion-link {
+    align-self: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #FFFFFF;
+    background: #1DB954;
+    padding: 8px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .cancion-link:hover { filter: brightness(1.07); }
+  .cancion-link:focus-visible { outline: 3px solid var(--petalo); outline-offset: 3px; }
+  #reproductor iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 12px; }
+
+  #progreso { margin: 0; font-size: 1.1rem; font-style: italic; opacity: .8; }
+
+  /* ===== Gotas, corazones y pétalos ===== */
+  .gota {
+    position: absolute;
+    top: 0;
+    width: 9px;
+    height: 13px;
+    background: #7EC3EC;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    pointer-events: none;
+    z-index: 2;
+    animation: caer .9s ease-in forwards;
+  }
+  @keyframes caer {
+    0%   { top: 0;   opacity: 0; }
+    15%  { opacity: 1; }
+    100% { top: 76%; opacity: 0; }
+  }
+  .corazon {
+    position: absolute;
+    bottom: 30%;
+    font-size: 1.3rem;
+    pointer-events: none;
+    z-index: 2;
+    animation: subir 1.8s ease-out forwards;
+  }
+  @keyframes subir {
+    from { transform: translate(0, 0) scale(.6); opacity: 0; }
+    20%  { opacity: 1; }
+    to   { transform: translate(var(--dx), -170px) scale(1.1); opacity: 0; }
+  }
+  .petalo-cae {
+    position: fixed;
+    top: -30px;
+    pointer-events: none;
+    animation: flotar linear forwards;
+  }
+  .petalo-cae.p {
+    width: 14px;
+    height: 22px;
+    background: var(--petalo);
+    border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+  }
+  @keyframes flotar {
+    to { transform: translate(var(--deriva), 110vh) rotate(540deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="escena">
+  <h1>Para Ashly</h1>
+  <p class="disculpa">Perdóname por no haberte dado nada el día de las flores amarillas. Por eso te hice esta, que nunca se va a marchitar.</p>
+
+  <div class="jardin" id="jardin">
+    <svg viewBox="0 0 300 400" role="img" aria-label="Una flor amarilla creciendo en una maceta">
+      <defs>
+        <radialGradient id="degradePetalo" cx="50%" cy="85%" r="80%">
+          <stop offset="0%" stop-color="var(--petalo)"/>
+          <stop offset="100%" stop-color="var(--petalo-claro)"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Tallo (nace en y=330, alto máximo 240) -->
+      <rect id="tallo" x="147" y="90" width="6" height="240" rx="3" fill="var(--tallo)"/>
+
+      <!-- Hojas -->
+      <path id="hoja1" d="M150 258 C122 250 104 230 98 210 C122 210 146 232 150 258 Z" fill="var(--hoja)"/>
+      <path id="hoja2" d="M150 204 C178 196 196 176 202 156 C178 156 154 178 150 204 Z" fill="var(--hoja)"/>
+
+      <!-- Flor (la cabeza se mueve a la punta del tallo) -->
+      <g id="cabeza" style="transform: translate(150px, 330px)">
+        <g id="flor-mece">
+          <g id="boton-flor">
+            <path d="M-9 0 C-12 -14 -6 -26 0 -32 C6 -26 12 -14 9 0 Z" fill="#74C45C"/>
+            <path d="M-10 0 L-4 -10 L0 0 L4 -10 L10 0 Z" fill="var(--tallo)"/>
+          </g>
+          <g id="petalos">
+            <g fill="url(#degradePetalo)" stroke="var(--petalo-borde)" stroke-width="1.2">
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(36)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(72)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(108)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(144)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(180)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(216)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(252)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(288)"/>
+              <path d="M0 -8 C-16 -22 -14 -52 0 -60 C14 -52 16 -22 0 -8 Z" transform="rotate(324)"/>
+            </g>
+            <circle r="16" fill="var(--centro)"/>
+            <!-- Corazón dorado en el centro -->
+            <path d="M0 7 C-10 0 -9 -8 -4 -8 C-2 -8 0 -6 0 -4 C0 -6 2 -8 4 -8 C9 -8 10 0 0 7 Z" fill="var(--petalo)"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- Maceta blanca con corazón -->
+      <ellipse cx="150" cy="332" rx="62" ry="10" fill="var(--tierra)"/>
+      <ellipse id="semilla" cx="150" cy="330" rx="7" ry="4.5" fill="#9A6B3D"/>
+      <path d="M86 334 L214 334 L200 396 L100 396 Z" fill="var(--maceta)"/>
+      <path d="M200 334 L214 334 L200 396 L188 396 Z" fill="var(--maceta-sombra)"/>
+      <rect x="80" y="326" width="140" height="14" rx="5" fill="var(--maceta)"/>
+      <path d="M150 382 C132 370 132 355 142 355 C146 355 150 359 150 362 C150 359 154 355 158 355 C168 355 168 370 150 382 Z" fill="var(--rosa)"/>
+    </svg>
+  </div>
+
+  <div class="tarjeta">
+    <p id="elogio" aria-live="polite">Riega la flor, Ashly, y mira lo que pasa…</p>
+  </div>
+
+  <button id="regar" type="button">Regar la flor 💧</button>
+  <p id="progreso">La semilla espera por ti</p>
+
+  <section class="cancion" aria-label="Nuestra canción">
+    <div class="cancion-info">
+      <div class="cancion-icono" aria-hidden="true">♫</div>
+      <div>
+        <p class="cancion-titulo">Ella Es Mi Todo</p>
+        <p class="cancion-artista">Kaleth Morales, Juank Ricardo</p>
+      </div>
+    </div>
+    <div id="reproductor"></div>
+    <a class="cancion-link" href="https://open.spotify.com/track/7ynTwByYTgs1UsWoQvWdvI" target="_blank" rel="noopener">Escuchar en Spotify</a>
+  </section>
+</main>
+
+<script>
+  const NOMBRE = "Ashly";
+
+  // 🎵 true = muestra el reproductor de Spotify dentro de la página (usar en GitHub Pages)
+  const USAR_REPRODUCTOR = true;
+  let controlSpotify = null;   // control del reproductor (para darle play desde el botón)
+  let musicaIniciada = false;
+
+  if (USAR_REPRODUCTOR) {
+    // Se oculta el botón que abre Spotify: la canción suena dentro de la página
+    document.querySelector(".cancion-link").hidden = true;
+
+    // API oficial de Spotify para controlar el reproductor desde JavaScript
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+      const contenedor = document.createElement("div");
+      document.getElementById("reproductor").appendChild(contenedor);
+      IFrameAPI.createController(
+        contenedor,
+        { uri: "spotify:track:7ynTwByYTgs1UsWoQvWdvI", width: "100%", height: 152 },
+        (control) => { controlSpotify = control; }
+      );
+    };
+    const script = document.createElement("script");
+    script.src = "https://open.spotify.com/embed/iframe-api/v1";
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  // La canción empieza con el primer riego
+  function iniciarMusica() {
+    if (controlSpotify && !musicaIniciada) {
+      controlSpotify.play();
+      musicaIniciada = true;
+    }
+  }
+
+  // ✏️ Los elogios salen en orden, uno por cada vez que presiona el botón
+  const ELOGIOS = [
+    "Tu sonrisa ilumina hasta el día más gris.",
+    "Eres la persona más bonita que he conocido, por dentro y por fuera.",
+    "Contigo hasta lo más sencillo se vuelve especial.",
+    "Tu risa es mi sonido favorito en todo el mundo.",
+    "Tienes un corazón tan bonito que haces mejor a todos los que te rodean.",
+    "Eres mi lugar tranquilo, mi casa y mi paz.",
+    "Tus ojos tienen algo que me desarma cada vez que me miras.",
+    "Admiro lo fuerte, lo inteligente y lo valiente que eres.",
+    "Cada día a tu lado se convierte en mi día favorito.",
+    "Eres más bonita que todas las flores de este jardín juntas.",
+    "Me haces querer ser mejor persona cada día.",
+    "Si pudiera elegir otra vez, te elegiría a ti. Siempre.",
+  ];
+
+  // Etapas de crecimiento de la flor
+  const ETAPAS = [
+    { alto: 0,   hoja1: 0, hoja2: 0, boton: 0,    petalos: 0 },
+    { alto: 30,  hoja1: 0, hoja2: 0, boton: 0.35, petalos: 0 },
+    { alto: 85,  hoja1: 1, hoja2: 0, boton: 0.5,  petalos: 0 },
+    { alto: 140, hoja1: 1, hoja2: 1, boton: 0.75, petalos: 0 },
+    { alto: 190, hoja1: 1, hoja2: 1, boton: 1,    petalos: 0 },
+    { alto: 220, hoja1: 1, hoja2: 1, boton: 0,    petalos: 0.55 },
+    { alto: 232, hoja1: 1, hoja2: 1, boton: 0,    petalos: 1 },
+  ];
+  const ULTIMA = ETAPAS.length - 1;
+  const ALTO_MAX = 240;
+  const SUELO = 330;
+
+  const $ = (id) => document.getElementById(id);
+  const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let etapa = 0;
+  let indiceElogio = 0;
+
+  function dibujar() {
+    const e = ETAPAS[etapa];
+    $("tallo").style.transform = `scaleY(${e.alto / ALTO_MAX})`;
+    $("cabeza").style.transform = `translate(150px, ${SUELO - e.alto}px)`;
+    $("hoja1").style.transform = `scale(${e.hoja1})`;
+    $("hoja2").style.transform = `scale(${e.hoja2})`;
+    $("boton-flor").style.transform = `scale(${e.boton})`;
+    $("petalos").style.transform = `scale(${e.petalos})`;
+    $("semilla").style.opacity = etapa === 0 ? 1 : 0;
+    $("flor-mece").classList.toggle("meciendo", etapa === ULTIMA);
+
+    $("progreso").textContent = etapa === ULTIMA
+      ? `Esta flor amarilla es tuya, ${NOMBRE} 💛`
+      : etapa === 0 ? "La semilla espera por ti" : `Va creciendo… ${etapa} de ${ULTIMA}`;
+    $("regar").textContent = etapa === ULTIMA ? "Sembrar otra vez 🌱" : "Regar la flor 💧";
+  }
+
+  // 💛 El último mensaje, cuando la flor abre, siempre es este
+  const MENSAJE_FINAL = `Te amo, ${NOMBRE} 💛`;
+
+  function mostrarElogio(esFinal) {
+    const el = $("elogio");
+    if (esFinal) {
+      el.textContent = MENSAJE_FINAL;
+    } else {
+      el.textContent = ELOGIOS[indiceElogio % ELOGIOS.length];
+      indiceElogio++;
+    }
+    el.classList.toggle("te-amo", esFinal);
+    el.classList.remove("aparece");
+    void el.offsetWidth; // reinicia la animación
+    el.classList.add("aparece");
+  }
+
+  function gotas() {
+    if (reducirMovimiento) return;
+    [-16, 0, 16].forEach((dx, i) => {
+      const g = document.createElement("span");
+      g.className = "gota";
+      g.style.left = `calc(50% + ${dx}px - 4px)`;
+      g.style.animationDelay = `${i * 0.12}s`;
+      $("jardin").appendChild(g);
+      setTimeout(() => g.remove(), 1400);
+    });
+  }
+
+  function corazones() {
+    if (reducirMovimiento) return;
+    for (let i = 0; i < 3; i++) {
+      const c = document.createElement("span");
+      c.className = "corazon";
+      c.textContent = ["💛", "💗", "💕"][i];
+      c.style.left = `calc(50% + ${(i - 1) * 22}px - 10px)`;
+      c.style.setProperty("--dx", `${(i - 1) * 30}px`);
+      c.style.animationDelay = `${0.4 + i * 0.15}s`;
+      $("jardin").appendChild(c);
+      setTimeout(() => c.remove(), 2800);
+    }
+  }
+
+  function lluviaFinal() {
+    if (reducirMovimiento) return;
+    for (let i = 0; i < 26; i++) {
+      const p = document.createElement("span");
+      const esCorazon = i % 3 === 0;
+      p.className = "petalo-cae" + (esCorazon ? "" : " p");
+      if (esCorazon) { p.textContent = "💛"; p.style.fontSize = "1.2rem"; }
+      p.style.left = `${Math.random() * 100}vw`;
+      p.style.setProperty("--deriva", `${(Math.random() - 0.5) * 160}px`);
+      const duracion = 3.5 + Math.random() * 3;
+      p.style.animationDuration = `${duracion}s`;
+      p.style.animationDelay = `${Math.random() * 1.2}s`;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), (duracion + 1.5) * 1000);
+    }
+  }
+
+  $("regar").addEventListener("click", () => {
+    iniciarMusica();
+    if (etapa < ULTIMA) {
+      etapa++;
+      mostrarElogio(etapa === ULTIMA);
+      gotas();
+      corazones();
+      dibujar();
+      if (etapa === ULTIMA) setTimeout(lluviaFinal, 600);
+    } else {
+      etapa = 0;
+      mostrarElogio(false);
+      dibujar();
+    }
+  });
+
+  dibujar();
+</script>
+</body>
+</html>
