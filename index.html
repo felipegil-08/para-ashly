@@ -542,6 +542,83 @@
   }
   @keyframes caer { 0% { top: 0; opacity: 0; } 15% { opacity: 1; } 100% { top: 76%; opacity: 0; } }
 
+  /* ================= ABRAZO A DISTANCIA ================= */
+  .jardin { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: pan-y; cursor: pointer; }
+  .jardin.pulso svg { animation: pulso-abrazo .4s ease; }
+  @keyframes pulso-abrazo { 40% { scale: 1.05; } }
+  .pista-abrazo { margin: 0; font-size: 1.05rem; font-style: italic; opacity: .85; }
+  #abrazo-anillo {
+    position: fixed;
+    width: 136px;
+    height: 136px;
+    translate: -50% -50%;
+    z-index: 47;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(.7);
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  #abrazo-anillo.ver { opacity: 1; transform: none; }
+  #abrazo-anillo svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px #F58BAE99); }
+  #abrazo-brillo {
+    position: fixed;
+    inset: 0;
+    z-index: 46;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, #F58BAE80 100%);
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+  .abrazo-mensaje {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    z-index: 47;
+    width: min(84vw, 340px);
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: var(--papel);
+    color: #5A1F36;
+    text-align: center;
+    box-shadow: 0 20px 50px #00000055;
+    opacity: 0;
+    transform: scale(.85);
+    pointer-events: none;
+    transition: opacity .5s ease, transform .6s cubic-bezier(.34, 1.4, .64, 1);
+  }
+  .abrazo-mensaje.ver { opacity: 1; transform: none; }
+  .abrazo-mensaje strong {
+    display: block;
+    font-family: "Great Vibes", "Brush Script MT", cursive;
+    font-weight: 400;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    color: #C23E6A;
+  }
+  .abrazo-mensaje span { font-size: 1.2rem; font-style: italic; }
+
+  /* ================= WHATSAPP Y GUARDAR FLOR ================= */
+  .btn-wa {
+    display: inline-block;
+    background: #25D366;
+    box-shadow: 0 6px 18px #25D36640;
+    text-decoration: none;
+    margin-top: 14px;
+  }
+  dialog.imagen-flor { text-align: center; }
+  dialog.imagen-flor img {
+    display: block;
+    max-width: 100%;
+    max-height: 58vh;
+    margin: 0 auto 10px;
+    border-radius: 12px;
+    box-shadow: 0 8px 22px #00000030;
+    -webkit-touch-callout: default;
+  }
+  .acciones { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .acciones .btn { text-decoration: none; font-size: 1.15rem; padding: 10px 22px; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
   }
@@ -574,6 +651,22 @@
     <p class="momento-sub" id="momento-sub">Ashly ♥ Andrés</p>
     <button class="btn" id="btn-continuar" type="button">Continuar 💛</button>
   </div>
+</div>
+
+<!-- Abrazo a distancia -->
+<div id="abrazo-brillo" aria-hidden="true"></div>
+<div id="abrazo-anillo" aria-hidden="true">
+  <svg viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="52" fill="none" stroke="#FFFFFF66" stroke-width="6"/>
+    <circle id="anillo-progreso" cx="60" cy="60" r="52" fill="none" stroke="#F58BAE" stroke-width="6"
+            stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/>
+    <path id="anillo-corazon" d="M60 84 C36 67 38 44 49 44 C55 44 60 49 60 55 C60 49 65 44 71 44 C82 44 84 67 60 84 Z"
+          fill="#F58BAE" fill-opacity=".12" stroke="#F58BAE" stroke-width="2"/>
+  </svg>
+</div>
+<div class="abrazo-mensaje" id="abrazo-mensaje" role="status">
+  <strong>Esto es un abrazo mío</strong>
+  <span>Guárdalo para cuando me extrañes 🤍</span>
 </div>
 
 <button class="btn-musica oculto" id="btn-musica" type="button" aria-label="Pausar la música">
@@ -645,6 +738,8 @@
 
   <button class="btn" id="regar" type="button">Regar la flor 💧</button>
   <p id="progreso">La semilla espera por ti</p>
+  <p id="pista-abrazo" class="pista-abrazo oculto">Mantén el dedo sobre la flor 3 segundos 🤍</p>
+  <button class="btn secundario oculto" id="btn-guardar" type="button">Guardar mi flor 📸</button>
   <p id="ramo-texto" class="oculto"></p>
 
   <section class="bloque oculto" id="sorpresa-perdon">
@@ -655,6 +750,7 @@
       <button class="btn secundario" id="btn-no" type="button">No</button>
     </div>
     <p id="respuesta" class="oculto" aria-live="polite"></p>
+    <a class="btn btn-wa oculto" id="btn-wa" href="#" target="_blank" rel="noopener">Respóndeme por WhatsApp 💬</a>
   </section>
 
   <section class="bloque oculto" id="sorpresa-fotos">
@@ -690,7 +786,20 @@
   <p class="carta-pista" id="carta-pista">Toca la carta para leerla completa</p>
   <div id="carta-texto"></div>
   <div class="carta-firma" id="carta-firma" role="img"></div>
-  <form method="dialog"><button class="btn" type="submit">Cerrar 💛</button></form>
+  <form method="dialog" class="acciones">
+    <a class="btn btn-wa" id="btn-wa-carta" href="#" target="_blank" rel="noopener" style="margin-top:0">Respóndeme 💬</a>
+    <button class="btn" type="submit">Cerrar 💛</button>
+  </form>
+</dialog>
+
+<dialog class="carta imagen-flor" id="dlg-imagen">
+  <h4>Tu flor 🌼</h4>
+  <img id="img-flor" alt="Tu flor amarilla para guardar">
+  <p class="carta-pista">Mantén presionada la imagen y elige "Guardar en Fotos"</p>
+  <form method="dialog" class="acciones">
+    <a class="btn" id="descargar-flor" href="#" download="flor-para-ashly.png">Descargar</a>
+    <button class="btn secundario" type="submit">Cerrar</button>
+  </form>
 </dialog>
 
 <script>
@@ -703,10 +812,10 @@
   const YOUTUBE_ID = "qRWMrOK5GRQ";                     // Ella Es Mi Todo (video oficial)
 
   const FOTOS = [
-    { src: "foto1.jpg.jpeg", texto: "Tú y yo" },
-    { src: "foto4.jpg.jpeg", texto: "De paseo contigo" },
-    { src: "foto3.jpg.jpeg", texto: "Esa mirada" },
-    { src: "foto2.jpg.jpeg", texto: "Nuestras aventuras" },
+    { src: "foto1.jpg", texto: "Tú y yo" },
+    { src: "foto4.jpg", texto: "De paseo contigo" },
+    { src: "foto3.jpg", texto: "Esa mirada" },
+    { src: "foto2.jpg", texto: "Nuestras aventuras" },
   ];
 
   const ELOGIOS = [
@@ -732,6 +841,11 @@
     "Te amo, hoy y siempre.",
   ];
 
+  // 💬 Tu WhatsApp con indicativo y sin espacios ni "+", ej: "573001234567"
+  //    Si lo dejas vacío, WhatsApp le pedirá a ella elegir el contacto.
+  const MI_WHATSAPP = "";
+  const MENSAJE_WHATSAPP = "Te perdono, mi amor 💛 Me encantó mi flor amarilla 🌼";
+
   // 🎵 true = la canción suena dentro de la página (versión para GitHub Pages)
   const USAR_REPRODUCTOR = true;
 
@@ -741,7 +855,62 @@
   const $ = (id) => document.getElementById(id);
   const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
   const reducirMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const vibrar = (patron) => { try { navigator.vibrate && navigator.vibrate(patron); } catch (e) {} };
+  /* Vibración: Android usa navigator.vibrate. iPhone no lo permite, así que se usa
+     el "toque háptico" que iOS 18+ da al activar un interruptor (input switch). */
+  const tieneVibrar = typeof navigator.vibrate === "function";
+  let etiquetaHaptica = null;
+  if (!tieneVibrar) {
+    etiquetaHaptica = document.createElement("label");
+    etiquetaHaptica.setAttribute("aria-hidden", "true");
+    etiquetaHaptica.style.display = "none";
+    const interruptor = document.createElement("input");
+    interruptor.type = "checkbox";
+    interruptor.setAttribute("switch", "");
+    etiquetaHaptica.appendChild(interruptor);
+    document.body.appendChild(etiquetaHaptica);
+  }
+  function toque() {
+    try {
+      if (tieneVibrar) navigator.vibrate(35);
+      else if (etiquetaHaptica) etiquetaHaptica.click();
+    } catch (e) {}
+  }
+  function vibrar(patron) {
+    try {
+      if (tieneVibrar) { navigator.vibrate(patron); return; }
+      const n = Array.isArray(patron) ? Math.ceil(patron.length / 2) : 1;
+      for (let i = 0; i < n; i++) setTimeout(toque, i * 160);
+    } catch (e) {}
+  }
+  function latidoHaptico() {
+    if (tieneVibrar) { try { navigator.vibrate([45, 110, 70]); } catch (e) {} }
+    else { toque(); setTimeout(toque, 170); }
+  }
+
+  // Sonido suave de latido (Web Audio): así el iPhone también "late"
+  let audioCtx = null;
+  function prepararAudio() {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+    } catch (e) {}
+  }
+  function sonidoLatido() {
+    if (!audioCtx) return;
+    const t0 = audioCtx.currentTime;
+    [0, 0.2].forEach((d, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(72, t0 + d);
+      o.frequency.exponentialRampToValueAtTime(38, t0 + d + 0.16);
+      g.gain.setValueAtTime(0.0001, t0 + d);
+      g.gain.exponentialRampToValueAtTime(i ? 0.35 : 0.6, t0 + d + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.2);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t0 + d);
+      o.stop(t0 + d + 0.22);
+    });
+  }
   const azar = (a, b) => a + Math.random() * (b - a);
   let fuentesListas = null;
   function cargarFuentes() {
@@ -1042,6 +1211,10 @@
   /* =====================================================================
      3. MÚSICA (YouTube)
      ===================================================================== */
+  const enlaceWhatsApp = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`;
+  $("btn-wa").href = enlaceWhatsApp;
+  $("btn-wa-carta").href = enlaceWhatsApp;
+
   let reproductor = null, reproductorListo = false, musicaPendiente = false, musicaIniciada = false, sonando = false;
   $("link-yt").href = `https://www.youtube.com/watch?v=${YOUTUBE_ID}`;
 
@@ -1318,7 +1491,212 @@
       etapa++;
       mostrarElogio(etapa === ULTIMA);
       gotas();
-      dibujar();
+      /* =====================================================================
+     10. ABRAZO A DISTANCIA (mantener el dedo sobre la flor 3 segundos)
+     ===================================================================== */
+  const DURACION_ABRAZO = 3000;
+  const LARGO_ANILLO = 326.7;
+  let abrazo = null;
+
+  function iniciarAbrazo(e) {
+    if (abrazo || (e.button !== undefined && e.button > 0)) return;
+    prepararAudio();
+    const c = centroDeLaFlor();
+    const anillo = $("abrazo-anillo");
+    anillo.style.left = `${c.x}px`;
+    anillo.style.top = `${c.y}px`;
+    anillo.classList.add("ver");
+    abrazo = { inicio: performance.now(), ultimoLatido: 0, raf: 0 };
+    const paso = (ahora) => {
+      if (!abrazo) return;
+      const p = Math.min(1, (ahora - abrazo.inicio) / DURACION_ABRAZO);
+      $("anillo-progreso").setAttribute("stroke-dashoffset", LARGO_ANILLO * (1 - p));
+      $("anillo-corazon").setAttribute("fill-opacity", 0.12 + p * 0.88);
+      $("abrazo-brillo").style.opacity = p * 0.9;
+      if (ahora - abrazo.ultimoLatido > 850) {
+        abrazo.ultimoLatido = ahora;
+        latidoHaptico();
+        sonidoLatido();
+        const j = $("jardin");
+        j.classList.remove("pulso"); void j.offsetWidth; j.classList.add("pulso");
+      }
+      if (p >= 1) completarAbrazo();
+      else abrazo.raf = requestAnimationFrame(paso);
+    };
+    abrazo.raf = requestAnimationFrame(paso);
+  }
+  function cancelarAbrazo() {
+    if (!abrazo) return;
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  async function completarAbrazo() {
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    const c = centroDeLaFlor();
+    emitir(c.x, c.y, 24, "corazon", { velMin: 1, velMax: 4, tamMin: 12, tamMax: 22, vidaMin: 80, vidaMax: 130, colores: ["#F58BAE", "#FFB3C7", "#FFD54F", "#FFFFFF"] });
+    emitir(c.x, c.y, 50, "chispa", { colores: ["#FFFFFF", "#FFB3C7", "#FFD54F"], velMin: 2, velMax: 6, vidaMin: 30, vidaMax: 60 });
+    for (let i = 0; i < 3; i++) setTimeout(() => { latidoHaptico(); sonidoLatido(); }, i * 700);
+    $("abrazo-mensaje").classList.add("ver");
+    await esperar(4000);
+    $("abrazo-mensaje").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  const jardin = $("jardin");
+  jardin.addEventListener("pointerdown", iniciarAbrazo);
+  ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => jardin.addEventListener(ev, cancelarAbrazo));
+  window.addEventListener("pointerup", cancelarAbrazo);
+  jardin.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  /* =====================================================================
+     11. GUARDAR SU FLOR COMO IMAGEN (formato de estado de WhatsApp)
+     ===================================================================== */
+  let imagenFlor = null;      // { blob, url }
+  const fotoPortada = new Image();
+  fotoPortada.src = FOTOS[0].src;
+
+  async function dibujarImagenFlor(conFoto) {
+    await cargarFuentes();
+    try { await document.fonts.load('60px "Cormorant Garamond"'); } catch (e) {}
+    const c = document.createElement("canvas");
+    c.width = 1080; c.height = 1920;
+    const x = c.getContext("2d");
+
+    const fondo = x.createLinearGradient(0, 0, 0, 1920);
+    fondo.addColorStop(0, "#140F2E");
+    fondo.addColorStop(1, "#3A1C44");
+    x.fillStyle = fondo;
+    x.fillRect(0, 0, 1080, 1920);
+    for (let i = 0; i < 140; i++) {
+      x.globalAlpha = azar(0.3, 1);
+      x.fillStyle = "#FFFFFF";
+      x.beginPath();
+      x.arc(Math.random() * 1080, Math.random() * 1500, azar(1, 3.2), 0, Math.PI * 2);
+      x.fill();
+    }
+    x.globalAlpha = 1;
+    x.textAlign = "center";
+
+    x.fillStyle = "#F58BAE";
+    x.font = '160px "Great Vibes", cursive';
+    x.fillText(`Para ${NOMBRE}`, 540, 250);
+
+    let arribaFlor = 330;
+    const hayFoto = conFoto && fotoPortada.complete && fotoPortada.naturalWidth > 0;
+    if (hayFoto) {
+      const r = 150, cx = 540, cy = 470;
+      x.save();
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.clip();
+      const lado = Math.min(fotoPortada.naturalWidth, fotoPortada.naturalHeight);
+      x.drawImage(fotoPortada, (fotoPortada.naturalWidth - lado) / 2, (fotoPortada.naturalHeight - lado) / 2, lado, lado, cx - r, cy - r, r * 2, r * 2);
+      x.restore();
+      x.strokeStyle = "#FFFFFF"; x.lineWidth = 10;
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.stroke();
+      arribaFlor = 660;
+    }
+
+    // Flor (mismas formas del SVG, escaladas)
+    const s = hayFoto ? 2.3 : 2.9;
+    const ox = 540 - 150 * s, oy = arribaFlor - 40 * s;
+    x.save();
+    x.translate(ox, oy);
+    x.scale(s, s);
+    const hx = 150, hy = 98;
+    const brillo = x.createRadialGradient(hx, hy, 0, hx, hy, 95);
+    brillo.addColorStop(0, "rgba(255,243,176,0.95)");
+    brillo.addColorStop(0.45, "rgba(255,213,79,0.4)");
+    brillo.addColorStop(1, "rgba(255,213,79,0)");
+    x.fillStyle = brillo;
+    x.beginPath(); x.arc(hx, hy, 95, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#3E8A4A";
+    x.fillRect(147, hy, 6, 330 - hy);
+    x.fillStyle = "#5DAE55";
+    x.fill(new Path2D("M150 258 C122 250 104 230 98 210 C122 210 146 232 150 258 Z"));
+    x.fill(new Path2D("M150 204 C178 196 196 176 202 156 C178 156 154 178 150 204 Z"));
+    const petalo = new Path2D(PETALO);
+    for (let i = 0; i < 10; i++) {
+      x.save();
+      x.translate(hx, hy);
+      x.rotate((i * 36 * Math.PI) / 180);
+      const g = x.createLinearGradient(0, 0, 0, -60);
+      g.addColorStop(0, "#FFC61A");
+      g.addColorStop(1, "#FFE680");
+      x.fillStyle = g;
+      x.fill(petalo);
+      x.strokeStyle = "#E4A100"; x.lineWidth = 1.2;
+      x.stroke(petalo);
+      x.restore();
+    }
+    x.fillStyle = "#8A4B10";
+    x.beginPath(); x.arc(hx, hy, 16, 0, Math.PI * 2); x.fill();
+    x.save(); x.translate(hx, hy);
+    x.fillStyle = "#FFC61A";
+    x.fill(new Path2D("M0 7 C-10 0 -9 -8 -4 -8 C-2 -8 0 -6 0 -4 C0 -6 2 -8 4 -8 C9 -8 10 0 0 7 Z"));
+    x.restore();
+    x.fillStyle = "#5E3B2B";
+    x.beginPath(); x.ellipse(150, 332, 62, 10, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#FFFFFF";
+    x.fill(new Path2D("M86 334 L214 334 L200 396 L100 396 Z"));
+    x.fillStyle = "#EFC7D4";
+    x.fill(new Path2D("M200 334 L214 334 L200 396 L188 396 Z"));
+    x.fillStyle = "#FFFFFF";
+    x.fillRect(80, 326, 140, 14);
+    x.fillStyle = "#F58BAE";
+    x.fill(new Path2D("M150 382 C132 370 132 355 142 355 C146 355 150 359 150 362 C150 359 154 355 158 355 C168 355 168 370 150 382 Z"));
+    x.restore();
+
+    const base = oy + 400 * s;
+    x.fillStyle = "#F6DCE8";
+    x.font = 'italic 62px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`${diasJuntos().toLocaleString("es-CO")} días juntos`, 540, base + 110);
+    x.fillStyle = "#FFD76A";
+    x.font = '130px "Great Vibes", cursive';
+    x.fillText("Te amo 💛", 540, base + 250);
+    x.fillStyle = "#F6DCE8";
+    x.globalAlpha = 0.7;
+    x.font = 'italic 44px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`Una flor que nunca se marchita · ${FIRMA}`, 540, 1850);
+    x.globalAlpha = 1;
+
+    return new Promise((ok, falla) => {
+      try { c.toBlob((b) => (b ? ok(b) : falla(new Error("sin imagen"))), "image/png"); }
+      catch (e) { falla(e); }
+    });
+  }
+
+  async function prepararImagenFlor() {
+    let blob;
+    try { blob = await dibujarImagenFlor(true); }
+    catch (e) { blob = await dibujarImagenFlor(false); }   // si la foto no se puede usar
+    if (imagenFlor) URL.revokeObjectURL(imagenFlor.url);
+    imagenFlor = { blob, url: URL.createObjectURL(blob) };
+    return imagenFlor;
+  }
+
+  function mostrarImagenParaGuardar() {
+    $("img-flor").src = imagenFlor.url;
+    $("descargar-flor").href = imagenFlor.url;
+    $("dlg-imagen").showModal();
+  }
+
+  $("btn-guardar").addEventListener("click", async () => {
+    if (!imagenFlor) await prepararImagenFlor();
+    const archivo = new File([imagenFlor.blob], "flor-para-ashly.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+      try {
+        await navigator.share({ files: [archivo], title: `Mi flor amarilla 🌼` });
+        return;
+      } catch (e) {
+        if (e.name === "AbortError") return;   // ella cerró el menú de compartir
+      }
+    }
+    mostrarImagenParaGuardar();
+  });
+
+  dibujar();
       const c = centroDeLaFlor();
       emitir(c.x, c.y + 20, 5, "corazon", { velMin: 0.5, velMax: 1.8, tamMin: 9, tamMax: 14, vidaMin: 60, vidaMax: 90, colores: ["#F58BAE", "#FFB3C7", "#FFD54F"] });
       if (etapa === ULTIMA) {
@@ -1329,8 +1707,13 @@
           emitir(p.x, p.y, 60, "polen", { colores: ["#FFD54F", "#FFF3B0", "#FFE08A"], velMin: 0.5, velMax: 3.2, vidaMin: 80, vidaMax: 140, tamMin: 1.2, tamMax: 2.6 });
           emitir(p.x, p.y, 40, "chispa", { colores: ["#FFFFFF", "#FFD54F"], velMin: 2, velMax: 6, vidaMin: 30, vidaMax: 60 });
         }, 700);
+        setTimeout(prepararImagenFlor, 2500);
         if (!yaFlorecio) {
           yaFlorecio = true;
+          setTimeout(() => {
+            revelar("pista-abrazo", false);
+            revelar("btn-guardar", false);
+          }, 2600);
           setTimeout(() => revelar("sorpresa-perdon"), 3600);
         }
       }
@@ -1339,7 +1722,212 @@
       ponerNoche(false);
       agregarAlRamo();
       mostrarElogio(false);
-      dibujar();
+      /* =====================================================================
+     10. ABRAZO A DISTANCIA (mantener el dedo sobre la flor 3 segundos)
+     ===================================================================== */
+  const DURACION_ABRAZO = 3000;
+  const LARGO_ANILLO = 326.7;
+  let abrazo = null;
+
+  function iniciarAbrazo(e) {
+    if (abrazo || (e.button !== undefined && e.button > 0)) return;
+    prepararAudio();
+    const c = centroDeLaFlor();
+    const anillo = $("abrazo-anillo");
+    anillo.style.left = `${c.x}px`;
+    anillo.style.top = `${c.y}px`;
+    anillo.classList.add("ver");
+    abrazo = { inicio: performance.now(), ultimoLatido: 0, raf: 0 };
+    const paso = (ahora) => {
+      if (!abrazo) return;
+      const p = Math.min(1, (ahora - abrazo.inicio) / DURACION_ABRAZO);
+      $("anillo-progreso").setAttribute("stroke-dashoffset", LARGO_ANILLO * (1 - p));
+      $("anillo-corazon").setAttribute("fill-opacity", 0.12 + p * 0.88);
+      $("abrazo-brillo").style.opacity = p * 0.9;
+      if (ahora - abrazo.ultimoLatido > 850) {
+        abrazo.ultimoLatido = ahora;
+        latidoHaptico();
+        sonidoLatido();
+        const j = $("jardin");
+        j.classList.remove("pulso"); void j.offsetWidth; j.classList.add("pulso");
+      }
+      if (p >= 1) completarAbrazo();
+      else abrazo.raf = requestAnimationFrame(paso);
+    };
+    abrazo.raf = requestAnimationFrame(paso);
+  }
+  function cancelarAbrazo() {
+    if (!abrazo) return;
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  async function completarAbrazo() {
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    const c = centroDeLaFlor();
+    emitir(c.x, c.y, 24, "corazon", { velMin: 1, velMax: 4, tamMin: 12, tamMax: 22, vidaMin: 80, vidaMax: 130, colores: ["#F58BAE", "#FFB3C7", "#FFD54F", "#FFFFFF"] });
+    emitir(c.x, c.y, 50, "chispa", { colores: ["#FFFFFF", "#FFB3C7", "#FFD54F"], velMin: 2, velMax: 6, vidaMin: 30, vidaMax: 60 });
+    for (let i = 0; i < 3; i++) setTimeout(() => { latidoHaptico(); sonidoLatido(); }, i * 700);
+    $("abrazo-mensaje").classList.add("ver");
+    await esperar(4000);
+    $("abrazo-mensaje").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  const jardin = $("jardin");
+  jardin.addEventListener("pointerdown", iniciarAbrazo);
+  ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => jardin.addEventListener(ev, cancelarAbrazo));
+  window.addEventListener("pointerup", cancelarAbrazo);
+  jardin.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  /* =====================================================================
+     11. GUARDAR SU FLOR COMO IMAGEN (formato de estado de WhatsApp)
+     ===================================================================== */
+  let imagenFlor = null;      // { blob, url }
+  const fotoPortada = new Image();
+  fotoPortada.src = FOTOS[0].src;
+
+  async function dibujarImagenFlor(conFoto) {
+    await cargarFuentes();
+    try { await document.fonts.load('60px "Cormorant Garamond"'); } catch (e) {}
+    const c = document.createElement("canvas");
+    c.width = 1080; c.height = 1920;
+    const x = c.getContext("2d");
+
+    const fondo = x.createLinearGradient(0, 0, 0, 1920);
+    fondo.addColorStop(0, "#140F2E");
+    fondo.addColorStop(1, "#3A1C44");
+    x.fillStyle = fondo;
+    x.fillRect(0, 0, 1080, 1920);
+    for (let i = 0; i < 140; i++) {
+      x.globalAlpha = azar(0.3, 1);
+      x.fillStyle = "#FFFFFF";
+      x.beginPath();
+      x.arc(Math.random() * 1080, Math.random() * 1500, azar(1, 3.2), 0, Math.PI * 2);
+      x.fill();
+    }
+    x.globalAlpha = 1;
+    x.textAlign = "center";
+
+    x.fillStyle = "#F58BAE";
+    x.font = '160px "Great Vibes", cursive';
+    x.fillText(`Para ${NOMBRE}`, 540, 250);
+
+    let arribaFlor = 330;
+    const hayFoto = conFoto && fotoPortada.complete && fotoPortada.naturalWidth > 0;
+    if (hayFoto) {
+      const r = 150, cx = 540, cy = 470;
+      x.save();
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.clip();
+      const lado = Math.min(fotoPortada.naturalWidth, fotoPortada.naturalHeight);
+      x.drawImage(fotoPortada, (fotoPortada.naturalWidth - lado) / 2, (fotoPortada.naturalHeight - lado) / 2, lado, lado, cx - r, cy - r, r * 2, r * 2);
+      x.restore();
+      x.strokeStyle = "#FFFFFF"; x.lineWidth = 10;
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.stroke();
+      arribaFlor = 660;
+    }
+
+    // Flor (mismas formas del SVG, escaladas)
+    const s = hayFoto ? 2.3 : 2.9;
+    const ox = 540 - 150 * s, oy = arribaFlor - 40 * s;
+    x.save();
+    x.translate(ox, oy);
+    x.scale(s, s);
+    const hx = 150, hy = 98;
+    const brillo = x.createRadialGradient(hx, hy, 0, hx, hy, 95);
+    brillo.addColorStop(0, "rgba(255,243,176,0.95)");
+    brillo.addColorStop(0.45, "rgba(255,213,79,0.4)");
+    brillo.addColorStop(1, "rgba(255,213,79,0)");
+    x.fillStyle = brillo;
+    x.beginPath(); x.arc(hx, hy, 95, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#3E8A4A";
+    x.fillRect(147, hy, 6, 330 - hy);
+    x.fillStyle = "#5DAE55";
+    x.fill(new Path2D("M150 258 C122 250 104 230 98 210 C122 210 146 232 150 258 Z"));
+    x.fill(new Path2D("M150 204 C178 196 196 176 202 156 C178 156 154 178 150 204 Z"));
+    const petalo = new Path2D(PETALO);
+    for (let i = 0; i < 10; i++) {
+      x.save();
+      x.translate(hx, hy);
+      x.rotate((i * 36 * Math.PI) / 180);
+      const g = x.createLinearGradient(0, 0, 0, -60);
+      g.addColorStop(0, "#FFC61A");
+      g.addColorStop(1, "#FFE680");
+      x.fillStyle = g;
+      x.fill(petalo);
+      x.strokeStyle = "#E4A100"; x.lineWidth = 1.2;
+      x.stroke(petalo);
+      x.restore();
+    }
+    x.fillStyle = "#8A4B10";
+    x.beginPath(); x.arc(hx, hy, 16, 0, Math.PI * 2); x.fill();
+    x.save(); x.translate(hx, hy);
+    x.fillStyle = "#FFC61A";
+    x.fill(new Path2D("M0 7 C-10 0 -9 -8 -4 -8 C-2 -8 0 -6 0 -4 C0 -6 2 -8 4 -8 C9 -8 10 0 0 7 Z"));
+    x.restore();
+    x.fillStyle = "#5E3B2B";
+    x.beginPath(); x.ellipse(150, 332, 62, 10, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#FFFFFF";
+    x.fill(new Path2D("M86 334 L214 334 L200 396 L100 396 Z"));
+    x.fillStyle = "#EFC7D4";
+    x.fill(new Path2D("M200 334 L214 334 L200 396 L188 396 Z"));
+    x.fillStyle = "#FFFFFF";
+    x.fillRect(80, 326, 140, 14);
+    x.fillStyle = "#F58BAE";
+    x.fill(new Path2D("M150 382 C132 370 132 355 142 355 C146 355 150 359 150 362 C150 359 154 355 158 355 C168 355 168 370 150 382 Z"));
+    x.restore();
+
+    const base = oy + 400 * s;
+    x.fillStyle = "#F6DCE8";
+    x.font = 'italic 62px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`${diasJuntos().toLocaleString("es-CO")} días juntos`, 540, base + 110);
+    x.fillStyle = "#FFD76A";
+    x.font = '130px "Great Vibes", cursive';
+    x.fillText("Te amo 💛", 540, base + 250);
+    x.fillStyle = "#F6DCE8";
+    x.globalAlpha = 0.7;
+    x.font = 'italic 44px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`Una flor que nunca se marchita · ${FIRMA}`, 540, 1850);
+    x.globalAlpha = 1;
+
+    return new Promise((ok, falla) => {
+      try { c.toBlob((b) => (b ? ok(b) : falla(new Error("sin imagen"))), "image/png"); }
+      catch (e) { falla(e); }
+    });
+  }
+
+  async function prepararImagenFlor() {
+    let blob;
+    try { blob = await dibujarImagenFlor(true); }
+    catch (e) { blob = await dibujarImagenFlor(false); }   // si la foto no se puede usar
+    if (imagenFlor) URL.revokeObjectURL(imagenFlor.url);
+    imagenFlor = { blob, url: URL.createObjectURL(blob) };
+    return imagenFlor;
+  }
+
+  function mostrarImagenParaGuardar() {
+    $("img-flor").src = imagenFlor.url;
+    $("descargar-flor").href = imagenFlor.url;
+    $("dlg-imagen").showModal();
+  }
+
+  $("btn-guardar").addEventListener("click", async () => {
+    if (!imagenFlor) await prepararImagenFlor();
+    const archivo = new File([imagenFlor.blob], "flor-para-ashly.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+      try {
+        await navigator.share({ files: [archivo], title: `Mi flor amarilla 🌼` });
+        return;
+      } catch (e) {
+        if (e.name === "AbortError") return;   // ella cerró el menú de compartir
+      }
+    }
+    mostrarImagenParaGuardar();
+  });
+
+  dibujar();
     }
   });
 
@@ -1368,6 +1956,7 @@
     r.textContent = "Sabía que dirías que sí. Gracias, mi amor. Te prometo que el próximo año vas a tener un ramo de verdad 💛";
     r.classList.remove("oculto");
     r.classList.add("revelar");
+    revelar("btn-wa", false);
     vibrar([40, 80, 40, 80, 120]);
     await esperar(900);
     await momentoFinal();
@@ -1464,6 +2053,211 @@
   $("btn-carta").addEventListener("click", () => {
     $("carta").showModal();
     escribirCarta();
+  });
+
+  /* =====================================================================
+     10. ABRAZO A DISTANCIA (mantener el dedo sobre la flor 3 segundos)
+     ===================================================================== */
+  const DURACION_ABRAZO = 3000;
+  const LARGO_ANILLO = 326.7;
+  let abrazo = null;
+
+  function iniciarAbrazo(e) {
+    if (abrazo || (e.button !== undefined && e.button > 0)) return;
+    prepararAudio();
+    const c = centroDeLaFlor();
+    const anillo = $("abrazo-anillo");
+    anillo.style.left = `${c.x}px`;
+    anillo.style.top = `${c.y}px`;
+    anillo.classList.add("ver");
+    abrazo = { inicio: performance.now(), ultimoLatido: 0, raf: 0 };
+    const paso = (ahora) => {
+      if (!abrazo) return;
+      const p = Math.min(1, (ahora - abrazo.inicio) / DURACION_ABRAZO);
+      $("anillo-progreso").setAttribute("stroke-dashoffset", LARGO_ANILLO * (1 - p));
+      $("anillo-corazon").setAttribute("fill-opacity", 0.12 + p * 0.88);
+      $("abrazo-brillo").style.opacity = p * 0.9;
+      if (ahora - abrazo.ultimoLatido > 850) {
+        abrazo.ultimoLatido = ahora;
+        latidoHaptico();
+        sonidoLatido();
+        const j = $("jardin");
+        j.classList.remove("pulso"); void j.offsetWidth; j.classList.add("pulso");
+      }
+      if (p >= 1) completarAbrazo();
+      else abrazo.raf = requestAnimationFrame(paso);
+    };
+    abrazo.raf = requestAnimationFrame(paso);
+  }
+  function cancelarAbrazo() {
+    if (!abrazo) return;
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  async function completarAbrazo() {
+    cancelAnimationFrame(abrazo.raf);
+    abrazo = null;
+    $("abrazo-anillo").classList.remove("ver");
+    const c = centroDeLaFlor();
+    emitir(c.x, c.y, 24, "corazon", { velMin: 1, velMax: 4, tamMin: 12, tamMax: 22, vidaMin: 80, vidaMax: 130, colores: ["#F58BAE", "#FFB3C7", "#FFD54F", "#FFFFFF"] });
+    emitir(c.x, c.y, 50, "chispa", { colores: ["#FFFFFF", "#FFB3C7", "#FFD54F"], velMin: 2, velMax: 6, vidaMin: 30, vidaMax: 60 });
+    for (let i = 0; i < 3; i++) setTimeout(() => { latidoHaptico(); sonidoLatido(); }, i * 700);
+    $("abrazo-mensaje").classList.add("ver");
+    await esperar(4000);
+    $("abrazo-mensaje").classList.remove("ver");
+    $("abrazo-brillo").style.opacity = 0;
+  }
+  const jardin = $("jardin");
+  jardin.addEventListener("pointerdown", iniciarAbrazo);
+  ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => jardin.addEventListener(ev, cancelarAbrazo));
+  window.addEventListener("pointerup", cancelarAbrazo);
+  jardin.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  /* =====================================================================
+     11. GUARDAR SU FLOR COMO IMAGEN (formato de estado de WhatsApp)
+     ===================================================================== */
+  let imagenFlor = null;      // { blob, url }
+  const fotoPortada = new Image();
+  fotoPortada.src = FOTOS[0].src;
+
+  async function dibujarImagenFlor(conFoto) {
+    await cargarFuentes();
+    try { await document.fonts.load('60px "Cormorant Garamond"'); } catch (e) {}
+    const c = document.createElement("canvas");
+    c.width = 1080; c.height = 1920;
+    const x = c.getContext("2d");
+
+    const fondo = x.createLinearGradient(0, 0, 0, 1920);
+    fondo.addColorStop(0, "#140F2E");
+    fondo.addColorStop(1, "#3A1C44");
+    x.fillStyle = fondo;
+    x.fillRect(0, 0, 1080, 1920);
+    for (let i = 0; i < 140; i++) {
+      x.globalAlpha = azar(0.3, 1);
+      x.fillStyle = "#FFFFFF";
+      x.beginPath();
+      x.arc(Math.random() * 1080, Math.random() * 1500, azar(1, 3.2), 0, Math.PI * 2);
+      x.fill();
+    }
+    x.globalAlpha = 1;
+    x.textAlign = "center";
+
+    x.fillStyle = "#F58BAE";
+    x.font = '160px "Great Vibes", cursive';
+    x.fillText(`Para ${NOMBRE}`, 540, 250);
+
+    let arribaFlor = 330;
+    const hayFoto = conFoto && fotoPortada.complete && fotoPortada.naturalWidth > 0;
+    if (hayFoto) {
+      const r = 150, cx = 540, cy = 470;
+      x.save();
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.clip();
+      const lado = Math.min(fotoPortada.naturalWidth, fotoPortada.naturalHeight);
+      x.drawImage(fotoPortada, (fotoPortada.naturalWidth - lado) / 2, (fotoPortada.naturalHeight - lado) / 2, lado, lado, cx - r, cy - r, r * 2, r * 2);
+      x.restore();
+      x.strokeStyle = "#FFFFFF"; x.lineWidth = 10;
+      x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.stroke();
+      arribaFlor = 660;
+    }
+
+    // Flor (mismas formas del SVG, escaladas)
+    const s = hayFoto ? 2.3 : 2.9;
+    const ox = 540 - 150 * s, oy = arribaFlor - 40 * s;
+    x.save();
+    x.translate(ox, oy);
+    x.scale(s, s);
+    const hx = 150, hy = 98;
+    const brillo = x.createRadialGradient(hx, hy, 0, hx, hy, 95);
+    brillo.addColorStop(0, "rgba(255,243,176,0.95)");
+    brillo.addColorStop(0.45, "rgba(255,213,79,0.4)");
+    brillo.addColorStop(1, "rgba(255,213,79,0)");
+    x.fillStyle = brillo;
+    x.beginPath(); x.arc(hx, hy, 95, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#3E8A4A";
+    x.fillRect(147, hy, 6, 330 - hy);
+    x.fillStyle = "#5DAE55";
+    x.fill(new Path2D("M150 258 C122 250 104 230 98 210 C122 210 146 232 150 258 Z"));
+    x.fill(new Path2D("M150 204 C178 196 196 176 202 156 C178 156 154 178 150 204 Z"));
+    const petalo = new Path2D(PETALO);
+    for (let i = 0; i < 10; i++) {
+      x.save();
+      x.translate(hx, hy);
+      x.rotate((i * 36 * Math.PI) / 180);
+      const g = x.createLinearGradient(0, 0, 0, -60);
+      g.addColorStop(0, "#FFC61A");
+      g.addColorStop(1, "#FFE680");
+      x.fillStyle = g;
+      x.fill(petalo);
+      x.strokeStyle = "#E4A100"; x.lineWidth = 1.2;
+      x.stroke(petalo);
+      x.restore();
+    }
+    x.fillStyle = "#8A4B10";
+    x.beginPath(); x.arc(hx, hy, 16, 0, Math.PI * 2); x.fill();
+    x.save(); x.translate(hx, hy);
+    x.fillStyle = "#FFC61A";
+    x.fill(new Path2D("M0 7 C-10 0 -9 -8 -4 -8 C-2 -8 0 -6 0 -4 C0 -6 2 -8 4 -8 C9 -8 10 0 0 7 Z"));
+    x.restore();
+    x.fillStyle = "#5E3B2B";
+    x.beginPath(); x.ellipse(150, 332, 62, 10, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#FFFFFF";
+    x.fill(new Path2D("M86 334 L214 334 L200 396 L100 396 Z"));
+    x.fillStyle = "#EFC7D4";
+    x.fill(new Path2D("M200 334 L214 334 L200 396 L188 396 Z"));
+    x.fillStyle = "#FFFFFF";
+    x.fillRect(80, 326, 140, 14);
+    x.fillStyle = "#F58BAE";
+    x.fill(new Path2D("M150 382 C132 370 132 355 142 355 C146 355 150 359 150 362 C150 359 154 355 158 355 C168 355 168 370 150 382 Z"));
+    x.restore();
+
+    const base = oy + 400 * s;
+    x.fillStyle = "#F6DCE8";
+    x.font = 'italic 62px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`${diasJuntos().toLocaleString("es-CO")} días juntos`, 540, base + 110);
+    x.fillStyle = "#FFD76A";
+    x.font = '130px "Great Vibes", cursive';
+    x.fillText("Te amo 💛", 540, base + 250);
+    x.fillStyle = "#F6DCE8";
+    x.globalAlpha = 0.7;
+    x.font = 'italic 44px "Cormorant Garamond", Georgia, serif';
+    x.fillText(`Una flor que nunca se marchita · ${FIRMA}`, 540, 1850);
+    x.globalAlpha = 1;
+
+    return new Promise((ok, falla) => {
+      try { c.toBlob((b) => (b ? ok(b) : falla(new Error("sin imagen"))), "image/png"); }
+      catch (e) { falla(e); }
+    });
+  }
+
+  async function prepararImagenFlor() {
+    let blob;
+    try { blob = await dibujarImagenFlor(true); }
+    catch (e) { blob = await dibujarImagenFlor(false); }   // si la foto no se puede usar
+    if (imagenFlor) URL.revokeObjectURL(imagenFlor.url);
+    imagenFlor = { blob, url: URL.createObjectURL(blob) };
+    return imagenFlor;
+  }
+
+  function mostrarImagenParaGuardar() {
+    $("img-flor").src = imagenFlor.url;
+    $("descargar-flor").href = imagenFlor.url;
+    $("dlg-imagen").showModal();
+  }
+
+  $("btn-guardar").addEventListener("click", async () => {
+    if (!imagenFlor) await prepararImagenFlor();
+    const archivo = new File([imagenFlor.blob], "flor-para-ashly.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+      try {
+        await navigator.share({ files: [archivo], title: `Mi flor amarilla 🌼` });
+        return;
+      } catch (e) {
+        if (e.name === "AbortError") return;   // ella cerró el menú de compartir
+      }
+    }
+    mostrarImagenParaGuardar();
   });
 
   dibujar();
